@@ -16,7 +16,6 @@ writer=csv.writer(csvfile)
 writer.writerow(['Date','SeqNum','r1','r2','r3','r4','r5','r6','b','Revenue','1st','2nd'])
 
 for m in range(1,136):
-    # url='http://kaijiang.zhcw.com/zhcw/html/ssq/list_'+str(m)+'.html'
     url='http://kaijiang.zhcw.com/zhcw/inc/ssq/ssq_wqhg.jsp?pageNum=%d'%m # 2020-10-22改
     html=download(url)
 
