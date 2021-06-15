@@ -1,10 +1,10 @@
 # ssq-git-ana
 This program it to practise PostgreSQL and pandas.
 
-I add this line and hope it can appear in github after I push it.
+git commit -m "remark" README.md
 
-I add 3rd line here.
+or
 
-I add 4th line.
+git commit -m "remark" .
 
-I add 5th line.
+git push
