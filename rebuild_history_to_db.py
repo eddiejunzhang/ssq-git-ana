@@ -268,5 +268,5 @@ if __name__ == "__main__":
     drop_table_tblhistory()
     create_table_tblhistory()
     import_data_into_db()
-    mark_have_plus_feature()
-    mark_have_minus_feature()
+    # mark_have_plus_feature()
+    # mark_have_minus_feature()
