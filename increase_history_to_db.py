@@ -66,12 +66,12 @@ def get_ssq_record(m,df,LastGameNumber,MarkSeqNum):
 def main():
     pass
     # 取得当前数据库中，号数最大的一期期号LastGameNumber
-    LastGameNumber = "2021025"
+    LastGameNumber = "2020107"
     MarkSeqNum = '2100001' #这个变量存放最后一次取得的期号，用于判断是否是2003001这最后一期
     # df用于存放待导入的数据，它开始是一个空的dataframe
     df = pd.DataFrame(columns=['Date','SeqNum','r1','r2','r3','r4','r5','r6','b','Revenue','1st','2nd'])
     
-    for i in range(1,4):
+    for i in range(1,6):
         df, MarkSeqNum = get_ssq_record(i,df,LastGameNumber, MarkSeqNum)
     
     print(df)
