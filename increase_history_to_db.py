@@ -67,7 +67,7 @@ def get_ssq_record(m,df,LastGameNumber,MarkSeqNum):
 
 def insert_data_into_db(df):
     
-    config_file_mac = r""
+    config_file_mac = r"/User/zhangjun/Code/_privateconfig\analysis.cfg" 
     config_file_win10 = r"D:\Study\PythonCoding\_privateconfig\analysis.cfg" 
     if os.path.isfile(config_file_win10):
         config_filename = config_file_win10
