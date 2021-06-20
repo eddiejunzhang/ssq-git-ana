@@ -127,14 +127,15 @@ def import_data_into_db():
     cur = conn.cursor()
     print("Opened database successfully")
     
-    filename = r"D:/Study/PythonCoding/ssq-analisys/ssqhistory.csv"
+    filename = r"ssqhistory.csv"
     
     df = pd.read_csv(filename)
     # print(df)
     for i,r in df.iterrows():
+        # print(r['Date'])
         w = datetime.strptime(r['Date'], '%Y-%m-%d')
         weekday = w.weekday()
-        print(weekday)
+        # print(weekday)
         r1 = r['r1']
         r2 = r['r2']
         r3 = r['r3']
