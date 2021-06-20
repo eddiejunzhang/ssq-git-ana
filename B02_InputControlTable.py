@@ -63,7 +63,7 @@ def analysis_contol_data():
                     from public.tblhistory
                     where r%d = %d
                     '''%(move_num,move_num,fix_num,check_num)
-                    print(strSQL)
+                    # print(strSQL)
                     df = pd.read_sql(strSQL,conn)
                     temp_a = df.iloc[0,0]
                     temp_b = df.iloc[0,1]
@@ -112,6 +112,10 @@ def analysis_contol_data():
             a[4],b[4],
             a[5],b[5])
             cur.execute(strSQL)
+        strSQL = '''
+        delete from public.tblallavailablecontrol where r1h =0 or r2h=0
+        '''
+        cur.execute(strSQL)
     conn.commit()
     conn.close()
     

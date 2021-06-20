@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jun 20 11:43:35 2021
-B01 创建表结构。
-@author: Eddie
+Created on Sun Jun 20 16:56:12 2021
+创建近似表，Universal Set
+@author: zhangjun
 """
+
 import psycopg2
 import configparser
 
@@ -38,7 +39,7 @@ def link_postgresql_db():
                             password=PASSWORD, host=HOST, port=PORT)
     return conn
 
-def drop_table_tblallavailablecontrol():
+def drop_table_tbluniversalset():
     # conn = link_postgresql_db()
     
     config=configparser.ConfigParser()
@@ -60,14 +61,14 @@ def drop_table_tblallavailablecontrol():
                             password=PASSWORD, host=HOST, port=PORT)
 
     cur = conn.cursor()
-    strsql = "DROP TABLE tblallavailablecontrol;"
+    strsql = "DROP TABLE tbluniversalset;"
     cur.execute(strsql)
     conn.commit()
     conn.close()
     
     print("Droped database successfully")
 
-def create_table_tblallavailablecontrol():
+def create_table_tbluniversalset():
     
     conn = link_postgresql_db()
     
@@ -76,20 +77,14 @@ def create_table_tblallavailablecontrol():
     cur = conn.cursor()
     
     strSQL = '''
-    CREATE TABLE public.tblallavailablecontrol
+    CREATE TABLE public.tbluniversalset
        (ID serial,
-       r1h         int,
-       r1t         int,
-       r2h         int,
-       r2t        int,
-       r3h        int,
-		r3t       int,
-       r4h         int,
-       r4t       int,
-       r5h       int,
-       r5t		int,
-       r6h		int,
-       r6t		int)
+       r1         int,
+       r2         int,
+       r3         int,
+       r4        int,
+       r5        int,
+	r6       int)
     '''
     cur.execute(strSQL)
     print("Table created successfully")
@@ -98,5 +93,5 @@ def create_table_tblallavailablecontrol():
     conn.close()
     
 if __name__ == "__main__":
-    drop_table_tblallavailablecontrol()    
-    create_table_tblallavailablecontrol()
+    # drop_table_tbluniversalset()    
+    create_table_tbluniversalset()
