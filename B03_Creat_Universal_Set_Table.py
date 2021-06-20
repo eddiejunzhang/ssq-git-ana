@@ -57,7 +57,7 @@ def drop_table_tbluniversalset():
     PASSWORD = config['DB']['PASSWORD']
     PORT = config['DB']['PORT']
     
-    conn = psycopg2.connect(database=DATABASE, user=USER, \
+    conn = psycopg2.connect(database=DATABASE, user=USER,
                             password=PASSWORD, host=HOST, port=PORT)
 
     cur = conn.cursor()
@@ -93,5 +93,5 @@ def create_table_tbluniversalset():
     conn.close()
     
 if __name__ == "__main__":
-    # drop_table_tbluniversalset()    
+    drop_table_tbluniversalset()    
     create_table_tbluniversalset()
