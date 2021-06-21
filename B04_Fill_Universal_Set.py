@@ -78,7 +78,7 @@ def main():
                                     '''%(i,j,k,l,m,n)
                                     cur.execute(strSQL)
                     print(index, 'i = ',i, 'j = ',j, 'k = ',k)
-    conn.commit()
+        conn.commit()
     print("Records created successfully")
     conn.close()
     
