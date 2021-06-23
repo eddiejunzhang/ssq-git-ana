@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jun 21 19:56:35 2021
-B05 用sqlalchemy实现把Universal中的数字合并之后，导入test表中
-用于排序，查找重复的行，并删除
+Created on Wed Jun 23 21:44:52 2021
+B06 delete dup
 @author: zhangjun
 """
 
 import os
 import psycopg2
 import configparser
+import pandas as pd
 
 def ping(ip):
     import os
@@ -21,7 +21,7 @@ def ping(ip):
     else:
         print('ping %s is ok'%ip)
         return(True)
-
+    
 def link_postgresql_db():
     config=configparser.ConfigParser()
     if ping('192.168.100.20'):
@@ -41,55 +41,7 @@ def link_postgresql_db():
                             password=PASSWORD, host=HOST, port=PORT)
     return conn
 
-def drop_table_tbltest():
-    # conn = link_postgresql_db()
-    
-    config=configparser.ConfigParser()
-    # config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
-    
-    if ping('192.168.100.20'):
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
-    else:
-        print('remote')
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
-
-    HOST = config['DB']['IP']
-    USER = config['DB']['USER']
-    DATABASE = config['DB']['DATABASE']
-    PASSWORD = config['DB']['PASSWORD']
-    PORT = config['DB']['PORT']
-    
-    conn = psycopg2.connect(database=DATABASE, user=USER, \
-                            password=PASSWORD, host=HOST, port=PORT)
-
-    cur = conn.cursor()
-    strsql = "DROP TABLE tbltest;"
-    cur.execute(strsql)
-    conn.commit()
-    conn.close()
-    
-    print("Droped database successfully")
-
-def create_table_tbltest():
-    
-    conn = link_postgresql_db()
-    
-    print("Opened database successfully")
-    
-    cur = conn.cursor()
-    
-    strSQL = '''
-    create table public.tbltest
-	(ID int,
-	dupstr char(12))
-    '''
-    cur.execute(strSQL)
-    print("Table created successfully")
-    
-    conn.commit()
-    conn.close()
-
-def insert_data() :
+def del_data() :
     
     config_file_mac = r"/Users/zhangjun/Code/_privateconfig/analysis.cfg" 
     config_file_win10 = r"D:\Study\PythonCoding\_privateconfig\analysis.cfg" 
@@ -140,36 +92,31 @@ def insert_data() :
         r6 = Column(Integer)
     
     Base.metadata.create_all()  # 将模型映射到数据库中
-
-# define target 
-    Base_string = declarative_base(engine)  # SQLORM基类
-    session_string = sessionmaker(engine)()  # 构建session对象
     
-    class String(Base_string):
-        __tablename__ = 'tbltest'  # 表名
-        # __abstract__ = True
-        id = Column(Integer, primary_key=True)
-        dupstr = Column(String)
-    
-    Base_string.metadata.create_all() 
-
-# select and insert   
-    m, n = 1, 6476089
-    item_list = session.query(Record).filter(Record.id >= m, Record.id < n).all()
-    # print(item)
-    for item in item_list:
-        a = item.id
-        b = "{:0>2d}{:0>2d}{:0>2d}{:0>2d}{:0>2d}{:0>2d}".format(item.r1, item.r2, item.r3, item.r4, item.r5, item.r6)
-        print(a,b)
-        string = String(id = a, dupstr = b)
-        session_string.add(string)  # 添加到session
-    
-    # session.commit()
-    session_string.commit()
-
-    conn.close()  # 关闭连接
+    conn1 = link_postgresql_db()
+    strSQL = '''
+    select id, dupstr
+    from public.tbltest t 
+    order by t.dupstr 
+    '''
+    print('start to generate df.')
+    df = pd.read_sql(strSQL,conn1)
+    print('df is ready. ')
+    swap = ''
+    count = 0
+    for index,row in df.iterrows():
+        idnum = row['id']
+        a = row['dupstr']
+        # print(r['Date'])
+        if a == swap:
+            print('delete one ', count, idnum)
+            count += 1
+            session.query(Record).filter(Record.id == idnum).delete()
+        else:
+            swap = a
+            
+    session.commt()
+    conn.close()
     
 if __name__ == "__main__":
-    drop_table_tbltest()    
-    create_table_tbltest()
-    insert_data()
+    del_data()  
