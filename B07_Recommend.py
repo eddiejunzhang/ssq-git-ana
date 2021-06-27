@@ -12,8 +12,8 @@ import pandas as pd
 
 def ping(ip):
     import os
-    ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
-    # ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    # ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
     if ret:
         print('ping %s is fail'%ip)
         return(False)
@@ -24,7 +24,8 @@ def ping(ip):
 def link_postgresql_db():
     config=configparser.ConfigParser()
     if ping('192.168.100.20'):
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
+        # config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
+        config.read('D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg')
     else:
         config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
     # config=configparser.ConfigParser()
@@ -45,14 +46,68 @@ def generate_recommemdation(qty):
     conn = link_postgresql_db()
     strSQL = '''
     SELECT id,r1,r2,r3,r4,r5,r6 FROM public.tbluniversalset
-    ORDER BY RAND()
-    LIMIT 1
-    '''
+    ORDER BY RANDOM()
+    LIMIT %d
+    '''%qty
     print('start to generate df.')
     df = pd.read_sql(strSQL,conn)
-    print('df is ready. ')
+    return df
+
+def filter_first_sixth_diff_is(df, diff_list):
+    if diff_list == None:
+        diff_list = [20]
+    df1 = pd.DataFrame()
+    for index,row in df.iterrows():
+        idnum = row['id']
+        r6 = row['r6']
+        r5 = row['r5']
+        r4 = row['r4']
+        r3 = row['r3']
+        r2 = row['r2']
+        r1 = row['r1']
+        dif = r6 - r1
+        if dif in diff_list:
+            s2 = pd.Series([idnum, r1, r2, r3, r4, r5, r6],
+               index=['id', 'r1', 'r2', 'r3', 'r4', 'r5','r6'])
+            df1 = df1.append(s2, ignore_index=True)
+    return df1
+
+def filter_a_plus_b_is_c(df):
+    df1 = pd.DataFrame()
+    for index,row in df.iterrows():
+        idnum = row['id']
+        r6 = row['r6']
+        r5 = row['r5']
+        r4 = row['r4']
+        r3 = row['r3']
+        r2 = row['r2']
+        r1 = row['r1']
+
+        # 以下的mark是关于是否存在和值的mark
+        mark = 0
+        print(idnum)
+        for i in range(1,4):
+            a = row[i]
+            for j in range(2,5):
+                b = row[j]
+                for k in range(3,6):
+                    c = row[k]
+                    if a + b == c:
+                        mark += 1
+                        
+        if mark > 0:
+            s2 = pd.Series([idnum, r1, r2, r3, r4, r5, r6],
+               index=['id', 'r1', 'r2', 'r3', 'r4', 'r5','r6'])
+            df1 = df1.append(s2, ignore_index=True)
+    return df1
+
+def main():
+    how_many = 81
+    df = generate_recommemdation(how_many) 
+    diff = [20,21,22,23]
+    df = filter_first_sixth_diff_is(df, diff)
+    df = filter_a_plus_b_is_c(df)
     print(df)
     
 if __name__ == "__main__":
-    how_many = 10
-    generate_recommemdation(how_many) 
+    main()
