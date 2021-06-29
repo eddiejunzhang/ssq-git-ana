@@ -42,7 +42,6 @@ def link_postgresql_db():
     return conn
 
 def generate_recommemdation(qty):
-    pass
     conn = link_postgresql_db()
     strSQL = '''
     SELECT id,r1,r2,r3,r4,r5,r6 FROM public.tbluniversalset
@@ -73,6 +72,7 @@ def filter_first_sixth_diff_is(df, diff_list):
     return df1
 
 def filter_a_plus_b_is_c(df):
+    # a+b = c
     df1 = pd.DataFrame()
     for index,row in df.iterrows():
         idnum = row['id']
@@ -102,6 +102,7 @@ def filter_a_plus_b_is_c(df):
     return df1
 
 def filter_d_minus_c_is_b_minus_a(df):
+    # d-c = b-a
     df1 = pd.DataFrame()
     for index,row in df.iterrows():
         idnum = row['id']
@@ -139,6 +140,42 @@ def filter_d_minus_c_is_b_minus_a(df):
             df1 = df1.append(s2, ignore_index=True)
     return df1
 
+def filter_contain_history_ball(df, qty):
+    df_result = pd.DataFrame()
+    conn = link_postgresql_db()
+    strSQL = '''
+    SELECT r1,r2,r3,r4,r5,r6 
+    FROM public.tblhistory
+    ORDER BY id DESC
+    LIMIT %d
+    '''%qty
+    df1 = pd.read_sql(strSQL,conn)
+        
+    filter_list = []
+    for index,row in df1.iterrows():
+        for item in row:
+            filter_list.append(item)
+    print(filter_list)
+
+    
+    for index, row in df.iterrows():
+        idnum = row['id']
+        r6 = row['r6']
+        r5 = row['r5']
+        r4 = row['r4']
+        r3 = row['r3']
+        r2 = row['r2']
+        r1 = row['r1']
+        flag = False
+        for item in row:
+            if item in filter_list:
+                flag = flag or True
+        if flag:
+            s2 = pd.Series([idnum, r1, r2, r3, r4, r5, r6],
+               index=['id', 'r1', 'r2', 'r3', 'r4', 'r5','r6'])
+            df_result = df_result.append(s2, ignore_index=True)            
+    return df_result
+
 def main():
     how_many = 49
     df = generate_recommemdation(how_many) 
@@ -146,6 +183,9 @@ def main():
     df = filter_first_sixth_diff_is(df, diff)
     df = filter_a_plus_b_is_c(df)
     df = filter_d_minus_c_is_b_minus_a(df)
+    qty = 2
+    df = filter_contain_history_ball(df, qty)
+    
     print(df)
     
 if __name__ == "__main__":

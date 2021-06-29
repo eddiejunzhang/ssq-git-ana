@@ -163,7 +163,7 @@ def insert_data_into_db(df):
 def main():
     pass
     # 取得当前数据库中，号数最大的一期期号LastGameNumber
-    LastGameNumber = "2021066"
+    LastGameNumber = "2021067"
     MarkSeqNum = '2100001' #这个变量存放最后一次取得的期号，用于判断是否是2003001这最后一期
     # df用于存放待导入的数据，它开始是一个空的dataframe
     df = pd.DataFrame(columns=['Date','SeqNum','r1','r2','r3','r4','r5','r6','b','Revenue','1st','2nd'])
