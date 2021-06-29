@@ -101,12 +101,51 @@ def filter_a_plus_b_is_c(df):
             df1 = df1.append(s2, ignore_index=True)
     return df1
 
+def filter_d_minus_c_is_b_minus_a(df):
+    df1 = pd.DataFrame()
+    for index,row in df.iterrows():
+        idnum = row['id']
+        r6 = row['r6']
+        r5 = row['r5']
+        r4 = row['r4']
+        r3 = row['r3']
+        r2 = row['r2']
+        r1 = row['r1']
+
+        # 以下的mark是关于是否存在差相等的mark
+        mark_minus = 0
+        m = []
+        m.append(r2-r1)
+        m.append(r3-r2)
+        m.append(r4-r3)
+        m.append(r5-r4)
+        m.append(r6-r5)
+        # print(row)
+        
+        a = 0
+        b = 0
+        for i in range(len(m)-1):
+            a = m[i]
+            # print('a = ', a)
+            for j in range(i+1,len(m)):
+                b = m[j]
+                # print('b = ',b)
+                if a == b:
+                    mark_minus += 1
+                        
+        if mark_minus > 0:
+            s2 = pd.Series([idnum, r1, r2, r3, r4, r5, r6],
+               index=['id', 'r1', 'r2', 'r3', 'r4', 'r5','r6'])
+            df1 = df1.append(s2, ignore_index=True)
+    return df1
+
 def main():
-    how_many = 81
+    how_many = 49
     df = generate_recommemdation(how_many) 
     diff = [20,21,22,23]
     df = filter_first_sixth_diff_is(df, diff)
     df = filter_a_plus_b_is_c(df)
+    df = filter_d_minus_c_is_b_minus_a(df)
     print(df)
     
 if __name__ == "__main__":
