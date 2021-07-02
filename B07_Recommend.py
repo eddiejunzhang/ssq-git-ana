@@ -85,7 +85,7 @@ def filter_a_plus_b_is_c(df):
 
         # 以下的mark是关于是否存在和值的mark
         mark = 0
-        print(idnum)
+        # print(idnum)
         for i in range(1,4):
             a = row[i]
             for j in range(2,5):
