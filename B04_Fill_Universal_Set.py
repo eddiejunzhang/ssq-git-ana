@@ -82,9 +82,9 @@ def main():
                                         '''%(i,j,k,l,m,n)
                                         cur.execute(strSQL)
                                         conn.commit()
-                                        print('No. %d is saved. %d-%d-%d'%(count, i,j,k))
+                                        print('No. %d is saved. %d:%d-%d-%d'%(index, count, i,j,k))
                                     else:
-                                        print('No. %d is NOT saved. %d-%d-%d'%(count,i,j,k))
+                                        print('No. %d is NOT saved. %d:%d-%d-%d'%(index, count,i,j,k))
                     print(index, 'i = ',i, 'j = ',j, 'k = ',k)
 
     print("Records created successfully")
