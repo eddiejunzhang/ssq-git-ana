@@ -66,7 +66,7 @@ def select_and_import_data_into_univ():
     cur = conn.cursor()
 
     strSQL = '''
-    select min(id) 
+    select min(id) as minid
     from public.tbltest 
     group by dupstr 
     order by dupstr
@@ -77,7 +77,7 @@ def select_and_import_data_into_univ():
     
     count = 0
     for index, row in df.iterrows():
-        idnum = row['id']
+        idnum = row['minid']
         strSQL = '''
         INSERT INTO public.tbluniversalset (R1,R2,R3,R4,R5,R6)
         SELECT a.r1,a.r2,a.r3,a.r4,a.r5,a.r6 
