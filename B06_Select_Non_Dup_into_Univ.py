@@ -9,6 +9,7 @@ import os
 import platform
 import psycopg2
 import configparser
+import pandas as pd
 
 def ping(ip):
     sys_id = platform.system()
@@ -61,11 +62,17 @@ def link_postgresql_db():
     return conn
 
 def select_and_import_data_into_univ():
-    pass
-    strSQL = '''
+    conn = link_postgresql_db()
 
-    '''%qty
+    strSQL = '''
+    select min(id) 
+    from public.tbltest 
+    group by dupstr 
+    order by dupstr
+    '''
     df = pd.read_sql(strSQL,conn)
+    df = df.head(100)
+    print(df)
 
 if __name__ == "__main__":
     select_and_import_data_into_univ()
