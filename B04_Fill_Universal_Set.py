@@ -73,7 +73,7 @@ def main():
                                     WHERE r1=%d and r2=%d and r3=%d and r4=%d and r5=%d and r6=%d
                                     '''%(i,j,k,l,m,n)
                                     df1 = pd.read_sql(strSQL,conn)
-                                    if not df1.empty:
+                                    if df1.empty:
                                         strSQL = '''
                                         INSERT INTO tbluniversalset (R1,R2,R3,R4,R5,R6)
                                         VALUES ( %d, %d, %d, %d, %d, %d)
