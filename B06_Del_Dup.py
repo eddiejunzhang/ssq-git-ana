@@ -3,6 +3,7 @@
 """
 Created on Wed Jun 23 21:44:52 2021
 B06 delete dup
+it takes too long time.
 @author: zhangjun
 """
 

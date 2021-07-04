@@ -19,6 +19,26 @@ def ping(ip):
     else:
         print('ping %s is ok'%ip)
         return(True)
+    
+def link_postgresql_db():
+    config=configparser.ConfigParser()
+    if ping('192.168.100.20'):
+        # config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
+        config.read('D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg')
+    else:
+        config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
+    # config=configparser.ConfigParser()
+    # config.read('analysis.cfg')
+    HOST = config['DB']['IP']
+    USER = config['DB']['USER']
+    DATABASE = config['DB']['DATABASE']
+    PASSWORD = config['DB']['PASSWORD']
+    PORT = config['DB']['PORT']
+    
+    print(HOST)
+    conn = psycopg2.connect(database=DATABASE, user=USER, \
+                            password=PASSWORD, host=HOST, port=PORT)
+    return conn
 
 def main():
     config=configparser.ConfigParser()
@@ -73,10 +93,16 @@ def main():
                             for n in range(int(r6min), int(r6max) + 1):
                                 if i<j and j<k and k<l and l<m and m<n:
                                     strSQL = '''
-                                    INSERT INTO tbluniversalset (R1,R2,R3,R4,R5,R6)
-                                    VALUES ( %d, %d, %d, %d, %d, %d)
+                                    SELECT * FROM tbluniversalset
+                                    WHERE r1=%d and r2=%d and r3=%d and r4=%d and r5=%d and r6=%d
                                     '''%(i,j,k,l,m,n)
-                                    cur.execute(strSQL)
+                                    df1 = pd.read_sql(strSQL,conn)
+                                    if df1.empty:
+                                        strSQL = '''
+                                        INSERT INTO tbluniversalset (R1,R2,R3,R4,R5,R6)
+                                        VALUES ( %d, %d, %d, %d, %d, %d)
+                                        '''%(i,j,k,l,m,n)
+                                        cur.execute(strSQL)
                     print(index, 'i = ',i, 'j = ',j, 'k = ',k)
         conn.commit()
     print("Records created successfully")
