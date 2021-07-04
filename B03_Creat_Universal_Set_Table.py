@@ -83,6 +83,7 @@ def create_table_tbluniversalset(table_name):
     strSQL = '''
     CREATE TABLE public.%s
        (ID serial,
+        seq   int4,
        r1         int,
        r2         int,
        r3         int,
