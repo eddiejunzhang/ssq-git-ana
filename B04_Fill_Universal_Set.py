@@ -17,28 +17,28 @@ from public_def import obtain_config_filename
 from public_def import link_postgresql_db
 
 def main():
-    
+
     config_filename = obtain_config_filename()
     config = configparser.ConfigParser()
     config.read(config_filename)
-    
+
     HOST = config['DB']['IP']
     USER = config['DB']['USER']
     DATABASE = config['DB']['DATABASE']
     PASSWORD = config['DB']['PASSWORD']
     PORT = config['DB']['PORT']
-    
-    conn = psycopg2.connect(database = DATABASE, 
+
+    conn = psycopg2.connect(database = DATABASE,
                             user = USER,
-                            password = PASSWORD, 
-                            host = HOST, 
+                            password = PASSWORD,
+                            host = HOST,
                             port = PORT)
     print("Opened database successfully")
 
     cur = conn.cursor()
 
     strSQL = '''
-    SELECT *  
+    SELECT *
     from public.tblallavailablecontrol
     '''
     # print(strSQL)
@@ -60,7 +60,7 @@ def main():
         r5max = row['r5t']
         r6min = row['r6h']
         r6max = row['r6t']
-        
+
         for i in range(int(r1min), int(r1max) + 1):
             for j in range(int(r2min), int(r2max) + 1):
                 for k in range(int(r3min), int(r3max) + 1):
@@ -70,19 +70,19 @@ def main():
                                 if i<j and j<k and k<l and l<m and m<n:
                                     strSQL = '''
                                     SELECT id FROM public.tbluniversalset
-                                    WHERE r1=%d,r2=%d,r3=%d,r4=%d,r5=%d,r6=%d
+                                    WHERE r1=%d and r2=%d and r3=%d and r4=%d and r5=%d and r6=%d
                                     '''%(i,j,k,l,m,n)
-                                    df1 = pd.read_sql(strSQL,conn) 
-                                    if not df1.empty():
+                                    df1 = pd.read_sql(strSQL,conn)
+                                    if not df1.empty:
                                         strSQL = '''
                                         INSERT INTO tbluniversalset (R1,R2,R3,R4,R5,R6)
                                         VALUES ( %d, %d, %d, %d, %d, %d)
                                         '''%(i,j,k,l,m,n)
                                         cur.execute(strSQL)
                     print(index, 'i = ',i, 'j = ',j, 'k = ',k)
-        conn.commit()
+                    conn.commit()
     print("Records created successfully")
     conn.close()
-    
+
 if __name__ == "__main__":
     main()

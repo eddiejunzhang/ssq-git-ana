@@ -30,7 +30,7 @@ def ping(ip):
 
 def obtain_config_filename():
     sys_id = platform.system()
-    
+
     if sys_id == 'Linux':
         config_filename = '/home/pi/Python_Proj/_privateconfig/analysis.cfg'
     elif sys_id == 'Windows':
@@ -40,7 +40,7 @@ def obtain_config_filename():
     else:
         print('别识别到可用的操作系统。')
     return config_filename
-    
+
 def link_postgresql_db():
     config=configparser.ConfigParser()
     if ping('192.168.100.20'):
@@ -55,7 +55,7 @@ def link_postgresql_db():
     DATABASE = config['DB']['DATABASE']
     PASSWORD = config['DB']['PASSWORD']
     PORT = config['DB']['PORT']
-    
+
     print(HOST)
     conn = psycopg2.connect(database=DATABASE, user=USER, \
                             password=PASSWORD, host=HOST, port=PORT)
@@ -64,22 +64,22 @@ def link_postgresql_db():
 def drop_table_tbluniversalset(table_name):
     conn = link_postgresql_db()
     cur = conn.cursor()
-    
+
     strsql = "DROP TABLE %s;"%table_name
     cur.execute(strsql)
     conn.commit()
     conn.close()
-    
+
     print("Droped database successfully")
 
 def create_table_tbluniversalset(table_name):
-    
+
     conn = link_postgresql_db()
-    
+
     print("Opened database successfully")
-    
+
     cur = conn.cursor()
-    
+
     strSQL = '''
     CREATE TABLE public.%s
        (ID serial,
@@ -92,11 +92,11 @@ def create_table_tbluniversalset(table_name):
     '''%table_name
     cur.execute(strSQL)
     print("Table created successfully")
-    
+
     conn.commit()
     conn.close()
-    
+
 if __name__ == "__main__":
     table_name = 'tbluniversalset'
-    drop_table_tbluniversalset(table_name)    
+    # drop_table_tbluniversalset(table_name)
     create_table_tbluniversalset(table_name)
