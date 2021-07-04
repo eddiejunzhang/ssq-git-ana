@@ -6,7 +6,7 @@ B07 推荐几组数，去购买
 """
 
 import os
-import platform.system
+import platform
 import psycopg2
 import configparser
 import pandas as pd
