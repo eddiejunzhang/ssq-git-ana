@@ -98,5 +98,5 @@ def create_table_tbluniversalset(table_name):
 
 if __name__ == "__main__":
     table_name = 'tbluniversalset'
-    # drop_table_tbluniversalset(table_name)
+    drop_table_tbluniversalset(table_name)
     create_table_tbluniversalset(table_name)

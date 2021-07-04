@@ -61,6 +61,7 @@ def main():
         r6min = row['r6h']
         r6max = row['r6t']
 
+        count = 0
         for i in range(int(r1min), int(r1max) + 1):
             for j in range(int(r2min), int(r2max) + 1):
                 for k in range(int(r3min), int(r3max) + 1):
@@ -68,6 +69,7 @@ def main():
                         for m in range(int(r5min), int(r5max) + 1):
                             for n in range(int(r6min), int(r6max) + 1):
                                 if i<j and j<k and k<l and l<m and m<n:
+                                    count += 1
                                     strSQL = '''
                                     SELECT id FROM public.tbluniversalset
                                     WHERE r1=%d and r2=%d and r3=%d and r4=%d and r5=%d and r6=%d
@@ -79,8 +81,12 @@ def main():
                                         VALUES ( %d, %d, %d, %d, %d, %d)
                                         '''%(i,j,k,l,m,n)
                                         cur.execute(strSQL)
+                                        conn.commit()
+                                        print('No. %d is saved. %d-%d-%d'%(count, i,j,k))
+                                    else:
+                                        print('No. %d is NOT saved. %d-%d-%d'%(count,i,j,k))
                     print(index, 'i = ',i, 'j = ',j, 'k = ',k)
-                    conn.commit()
+
     print("Records created successfully")
     conn.close()
 
