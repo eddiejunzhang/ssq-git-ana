@@ -12,9 +12,6 @@ import platform
 import psycopg2
 import configparser
 
-global sys_id
-sys_id = platform.system()
-
 def ping(ip):
     if sys_id == 'Linux':
         ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
@@ -45,14 +42,8 @@ def obtain_config_filename(sys_id):
 def link_postgresql_db():
     config=configparser.ConfigParser()
     if ping('192.168.100.20'):
-        if sys_id == 'Linux':
-            config.read('/home/pi/Python_Proj/_privateconfig/analysis.cfg')
-        elif sys_id == 'Windows':
-            config.read('D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg')
-        elif sys_id == 'Mac':
-            config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
-        else:
-            print('别识别到可用的操作系统。')
+        config_filename = obtain_config_filename(sys_id)
+        config.read(config_filename)
     else:
         config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
     # config=configparser.ConfigParser()
@@ -75,14 +66,8 @@ def drop_table_tbltest():
     # config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
     
     if ping('192.168.100.20'):
-        if sys_id == 'Linux':
-            config.read('/home/pi/Python_Proj/_privateconfig/analysis.cfg')
-        elif sys_id == 'Windows':
-            config.read('D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg')
-        elif sys_id == 'Mac':
-            config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
-        else:
-            print('别识别到可用的操作系统。')
+        config_filename = obtain_config_filename(sys_id)
+        config.read(config_filename)
     else:
         print('remote')
         config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
@@ -197,6 +182,7 @@ def insert_data() :
     conn.close()  # 关闭连接
     
 if __name__ == "__main__":
+    sys_id = platform.system()
     
     drop_table_tbltest()    
     create_table_tbltest()
