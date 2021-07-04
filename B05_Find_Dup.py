@@ -13,6 +13,7 @@ import psycopg2
 import configparser
 
 def ping(ip):
+    sys_id = platform.system()
     if sys_id == 'Linux':
         ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
     elif sys_id == 'Windows':
@@ -28,7 +29,9 @@ def ping(ip):
         print('ping %s is ok'%ip)
         return(True)
 
-def obtain_config_filename(sys_id):
+def obtain_config_filename():
+    sys_id = platform.system()
+    
     if sys_id == 'Linux':
         config_filename = '/home/pi/Python_Proj/_privateconfig/analysis.cfg'
     elif sys_id == 'Windows':
@@ -42,7 +45,7 @@ def obtain_config_filename(sys_id):
 def link_postgresql_db():
     config=configparser.ConfigParser()
     if ping('192.168.100.20'):
-        config_filename = obtain_config_filename(sys_id)
+        config_filename = obtain_config_filename()
         config.read(config_filename)
     else:
         config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
@@ -66,7 +69,7 @@ def drop_table_tbltest():
     # config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
     
     if ping('192.168.100.20'):
-        config_filename = obtain_config_filename(sys_id)
+        config_filename = obtain_config_filename()
         config.read(config_filename)
     else:
         print('remote')
@@ -110,7 +113,7 @@ def create_table_tbltest():
 
 def insert_data() :
     
-    config_filename = obtain_config_filename(sys_id)
+    config_filename = obtain_config_filename()
     
     config = configparser.ConfigParser() 
     print(config_filename)
@@ -182,8 +185,6 @@ def insert_data() :
     conn.close()  # 关闭连接
     
 if __name__ == "__main__":
-    sys_id = platform.system()
-    
     drop_table_tbltest()    
     create_table_tbltest()
     insert_data()
