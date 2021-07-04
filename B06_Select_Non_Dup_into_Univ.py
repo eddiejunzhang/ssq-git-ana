@@ -72,8 +72,8 @@ def select_and_import_data_into_univ():
     order by dupstr
     '''
     df = pd.read_sql(strSQL,conn)
-    df = df.head(100)
-    print(df)
+    # df = df.head(100)
+    # print(df)
     
     count = 0
     for index, row in df.iterrows():
