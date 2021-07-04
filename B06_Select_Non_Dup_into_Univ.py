@@ -75,13 +75,20 @@ def select_and_import_data_into_univ():
     df = df.head(100)
     print(df)
     
+    count = 0
     for index, row in df.iterrows():
         idnum = row['id']
         strSQL = '''
-        INSERT INTO tbluniversalset (R1,R2,R3,R4,R5,R6)
-        VALUES ( %d, %d, %d, %d, %d, %d)
-        '''%(i,j,k,l,m,n)
+        INSERT INTO public.tbluniversalset (R1,R2,R3,R4,R5,R6)
+        SELECT a.r1,a.r2,a.r3,a.r4,a.r5,a.r6 
+        FROM public.tbluniversalset1 a 
+        WHERE a.id = %d
+        '''%idnum
         cur.execute(strSQL)
+        count += 1
+        print(count)
+        conn.commit()
+    conn.close()
 
 if __name__ == "__main__":
     select_and_import_data_into_univ()
