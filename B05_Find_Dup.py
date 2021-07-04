@@ -8,13 +8,22 @@ B05 用sqlalchemy实现把Universal中的数字合并之后，导入test表中
 """
 
 import os
+import platform
 import psycopg2
 import configparser
 
+global sys_id
+sys_id = platform.system()
+
 def ping(ip):
-    import os
-    ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
-    # ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    if sys_id == 'Linux':
+        ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    elif sys_id == 'Windows':
+        ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    elif sys_id == 'Mac':
+        ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    else:
+        print('别识别到可用的操作系统。')
     if ret:
         print('ping %s is fail'%ip)
         return(False)
@@ -22,10 +31,28 @@ def ping(ip):
         print('ping %s is ok'%ip)
         return(True)
 
+def obtain_config_filename(sys_id):
+    if sys_id == 'Linux':
+        config_filename = '/home/pi/Python_Proj/_privateconfig/analysis.cfg'
+    elif sys_id == 'Windows':
+        config_filename = 'D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg'
+    elif sys_id == 'Mac':
+        config_filename = '/Users/zhangjun/Code/_privateconfig/analysis.cfg'
+    else:
+        print('别识别到可用的操作系统。')
+    return config_filename
+    
 def link_postgresql_db():
     config=configparser.ConfigParser()
     if ping('192.168.100.20'):
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
+        if sys_id == 'Linux':
+            config.read('/home/pi/Python_Proj/_privateconfig/analysis.cfg')
+        elif sys_id == 'Windows':
+            config.read('D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg')
+        elif sys_id == 'Mac':
+            config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
+        else:
+            print('别识别到可用的操作系统。')
     else:
         config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
     # config=configparser.ConfigParser()
@@ -48,7 +75,14 @@ def drop_table_tbltest():
     # config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
     
     if ping('192.168.100.20'):
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
+        if sys_id == 'Linux':
+            config.read('/home/pi/Python_Proj/_privateconfig/analysis.cfg')
+        elif sys_id == 'Windows':
+            config.read('D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg')
+        elif sys_id == 'Mac':
+            config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
+        else:
+            print('别识别到可用的操作系统。')
     else:
         print('remote')
         config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
@@ -91,15 +125,8 @@ def create_table_tbltest():
 
 def insert_data() :
     
-    config_file_mac = r"/Users/zhangjun/Code/_privateconfig/analysis.cfg" 
-    config_file_win10 = r"D:\Study\PythonCoding\_privateconfig\analysis.cfg" 
-    if os.path.isfile(config_file_win10):
-        config_filename = config_file_win10
-    elif os.path.isfile(config_file_mac):
-        config_filename = config_file_mac
-    else:
-        print('未找到配置文件.')
-        
+    config_filename = obtain_config_filename(sys_id)
+    
     config = configparser.ConfigParser() 
     print(config_filename)
     config.read(config_filename)
@@ -129,7 +156,7 @@ def insert_data() :
     session = sessionmaker(engine)()  # 构建session对象
     
     class Record(Base):
-        __tablename__ = 'tbluniversalset'  # 表名
+        __tablename__ = 'tbluniversalset1'  # 表名
         # __abstract__ = True
         id = Column(Integer, primary_key=True)
         r1 = Column(Integer)
@@ -154,7 +181,7 @@ def insert_data() :
     Base_string.metadata.create_all() 
 
 # select and insert   
-    m, n = 1, 6476089
+    m, n = 1, 100  #6476089
     item_list = session.query(Record).filter(Record.id >= m, Record.id < n).all()
     # print(item)
     for item in item_list:
@@ -170,6 +197,7 @@ def insert_data() :
     conn.close()  # 关闭连接
     
 if __name__ == "__main__":
+    
     drop_table_tbltest()    
     create_table_tbltest()
     insert_data()
