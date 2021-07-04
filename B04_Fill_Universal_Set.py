@@ -5,26 +5,48 @@ Created on Sun Jun 20 16:52:46 2021
 B04 根据B02填写的控制表，向近似表中填写数据。
 @author: zhangjun
 """
+
+import os
+import platform
 import psycopg2
 import configparser
 import pandas as pd
 
 def ping(ip):
-    import os
-    ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
-    # ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    sys_id = platform.system()
+    if sys_id == 'Linux':
+        ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    elif sys_id == 'Windows':
+        ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    elif sys_id == 'Mac':
+        ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+    else:
+        print('别识别到可用的操作系统。')
     if ret:
         print('ping %s is fail'%ip)
         return(False)
     else:
         print('ping %s is ok'%ip)
         return(True)
+
+def obtain_config_filename():
+    sys_id = platform.system()
+    
+    if sys_id == 'Linux':
+        config_filename = '/home/pi/Python_Proj/_privateconfig/analysis.cfg'
+    elif sys_id == 'Windows':
+        config_filename = 'D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg'
+    elif sys_id == 'Mac':
+        config_filename = '/Users/zhangjun/Code/_privateconfig/analysis.cfg'
+    else:
+        print('别识别到可用的操作系统。')
+    return config_filename
     
 def link_postgresql_db():
     config=configparser.ConfigParser()
     if ping('192.168.100.20'):
-        # config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
-        config.read('D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg')
+        config_filename = obtain_config_filename()
+        config.read(config_filename)
     else:
         config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
     # config=configparser.ConfigParser()
@@ -41,11 +63,11 @@ def link_postgresql_db():
     return conn
 
 def main():
-    config=configparser.ConfigParser()
-    if ping('192.168.100.20'):
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
-    else:
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
+    
+    config_filename = obtain_config_filename()
+    config = configparser.ConfigParser()
+    config.read(config_filename)
+    
     HOST = config['DB']['IP']
     USER = config['DB']['USER']
     DATABASE = config['DB']['DATABASE']

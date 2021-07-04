@@ -65,14 +65,7 @@ def link_postgresql_db():
 
 def del_data() :
     
-    config_file_mac = r"/Users/zhangjun/Code/_privateconfig/analysis.cfg" 
-    config_file_win10 = r"D:\Study\PythonCoding\_privateconfig\analysis.cfg" 
-    if os.path.isfile(config_file_win10):
-        config_filename = config_file_win10
-    elif os.path.isfile(config_file_mac):
-        config_filename = config_file_mac
-    else:
-        print('未找到配置文件.')
+    config_filename = obtain_config_filename()
         
     config = configparser.ConfigParser() 
     print(config_filename)

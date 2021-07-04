@@ -62,27 +62,9 @@ def link_postgresql_db():
     return conn
 
 def drop_table_tbluniversalset(table_name):
-    # conn = link_postgresql_db()
-    
-    config=configparser.ConfigParser()
-    # config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
-    
-    if ping('192.168.100.20'):
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis.cfg')
-    else:
-        print('remote')
-        config.read('/Users/zhangjun/Code/_privateconfig/analysis_oray.cfg')
-
-    HOST = config['DB']['IP']
-    USER = config['DB']['USER']
-    DATABASE = config['DB']['DATABASE']
-    PASSWORD = config['DB']['PASSWORD']
-    PORT = config['DB']['PORT']
-    
-    conn = psycopg2.connect(database=DATABASE, user=USER,
-                            password=PASSWORD, host=HOST, port=PORT)
-
+    conn = link_postgresql_db()
     cur = conn.cursor()
+    
     strsql = "DROP TABLE %s;"%table_name
     cur.execute(strsql)
     conn.commit()
@@ -106,7 +88,7 @@ def create_table_tbluniversalset(table_name):
        r3         int,
        r4        int,
        r5        int,
-	r6       int)
+	   r6       int)
     '''%table_name
     cur.execute(strSQL)
     print("Table created successfully")
