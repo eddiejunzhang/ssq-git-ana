@@ -93,5 +93,5 @@ def create_table_tbluniversalset():
     conn.close()
     
 if __name__ == "__main__":
-    drop_table_tbluniversalset()    
+    # drop_table_tbluniversalset()    
     create_table_tbluniversalset()
