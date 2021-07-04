@@ -18,7 +18,7 @@ def ping(ip):
     elif sys_id == 'Windows':
         ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
     elif sys_id == 'Darwin':
-        ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
+        ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
     else:
         print('别识别到可用的操作系统。')
     if ret:
@@ -72,8 +72,8 @@ def select_and_import_data_into_univ():
     order by dupstr
     '''
     df = pd.read_sql(strSQL,conn)
-    # df = df.head(100)
-    # print(df)
+    df = df.head(100)
+    print(df)
     
     count = 0
     for index, row in df.iterrows():
