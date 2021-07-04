@@ -60,3 +60,12 @@ def link_postgresql_db():
                             password=PASSWORD, host=HOST, port=PORT)
     return conn
 
+def select_and_import_data_into_univ():
+    pass
+    strSQL = '''
+
+    '''%qty
+    df = pd.read_sql(strSQL,conn)
+
+if __name__ == "__main__":
+    select_and_import_data_into_univ()
