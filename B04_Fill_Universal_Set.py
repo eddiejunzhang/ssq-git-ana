@@ -93,16 +93,10 @@ def main():
                             for n in range(int(r6min), int(r6max) + 1):
                                 if i<j and j<k and k<l and l<m and m<n:
                                     strSQL = '''
-                                    SELECT * FROM tbluniversalset
-                                    WHERE r1=%d and r2=%d and r3=%d and r4=%d and r5=%d and r6=%d
+                                    INSERT INTO tbluniversalset (R1,R2,R3,R4,R5,R6)
+                                    VALUES ( %d, %d, %d, %d, %d, %d)
                                     '''%(i,j,k,l,m,n)
-                                    df1 = pd.read_sql(strSQL,conn)
-                                    if df1.empty:
-                                        strSQL = '''
-                                        INSERT INTO tbluniversalset (R1,R2,R3,R4,R5,R6)
-                                        VALUES ( %d, %d, %d, %d, %d, %d)
-                                        '''%(i,j,k,l,m,n)
-                                        cur.execute(strSQL)
+                                    cur.execute(strSQL)
                     print(index, 'i = ',i, 'j = ',j, 'k = ',k)
         conn.commit()
     print("Records created successfully")

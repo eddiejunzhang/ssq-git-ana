@@ -17,7 +17,7 @@ def ping(ip):
         ret =os.system('ping -c 1 -W 1 %s'%ip) #每个ip ping 1次，等待时间为1s
     elif sys_id == 'Windows':
         ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
-    elif sys_id == 'Mac':
+    elif sys_id == 'Darwin':
         ret =os.system('ping -w 1 %s'%ip) #每个ip ping 1次，等待时间为1s
     else:
         print('别识别到可用的操作系统。')
@@ -35,7 +35,7 @@ def obtain_config_filename():
         config_filename = '/home/pi/Python_Proj/_privateconfig/analysis.cfg'
     elif sys_id == 'Windows':
         config_filename = 'D:\\Study\\PythonCoding\\_privateconfig\\analysis.cfg'
-    elif sys_id == 'Mac':
+    elif sys_id == 'Darwin':
         config_filename = '/Users/zhangjun/Code/_privateconfig/analysis.cfg'
     else:
         print('别识别到可用的操作系统。')
@@ -63,6 +63,7 @@ def link_postgresql_db():
 
 def select_and_import_data_into_univ():
     conn = link_postgresql_db()
+    cur = conn.cursor()
 
     strSQL = '''
     select min(id) 
@@ -73,6 +74,14 @@ def select_and_import_data_into_univ():
     df = pd.read_sql(strSQL,conn)
     df = df.head(100)
     print(df)
+    
+    for index, row in df.iterrows():
+        idnum = row['id']
+        strSQL = '''
+        INSERT INTO tbluniversalset (R1,R2,R3,R4,R5,R6)
+        VALUES ( %d, %d, %d, %d, %d, %d)
+        '''%(i,j,k,l,m,n)
+        cur.execute(strSQL)
 
 if __name__ == "__main__":
     select_and_import_data_into_univ()
