@@ -43,7 +43,7 @@ def main():
     '''
     # print(strSQL)
     df = pd.read_sql(strSQL,conn)
-
+    count = 0
     # print('r1 min = %s, r6 max = %s'%(r1min, r6max))
     # df = df.head(2)
     for index,row in df.iterrows():
@@ -61,7 +61,6 @@ def main():
         r6min = row['r6h']
         r6max = row['r6t']
 
-        count = 0
         for i in range(int(r1min), int(r1max) + 1):
             for j in range(int(r2min), int(r2max) + 1):
                 for k in range(int(r3min), int(r3max) + 1):
