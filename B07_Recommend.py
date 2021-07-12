@@ -64,7 +64,7 @@ def link_postgresql_db():
 def generate_recommemdation(qty):
     conn = link_postgresql_db()
     strSQL = '''
-    SELECT id,r1,r2,r3,r4,r5,r6 FROM public.tbluniversalset
+    SELECT id,r1,r2,r3,r4,r5,r6 FROM public.tbluniversalset1
     ORDER BY RANDOM()
     LIMIT %d
     '''%qty
@@ -164,18 +164,32 @@ def filter_contain_history_ball(df, qty):
     df_result = pd.DataFrame()
     conn = link_postgresql_db()
     strSQL = '''
-    SELECT r1,r2,r3,r4,r5,r6 
+    SELECT r1,r2,r3,r4,r5,r6,b
     FROM public.tblhistory
     ORDER BY id DESC
     LIMIT %d
     '''%qty
     df1 = pd.read_sql(strSQL,conn)
+    
+    b1= df1.iloc[0,6]
+    b2= df1.iloc[1,6]
+    
+    b_list = []
+    b_list.append(b1)
+    if b2>b1:
+        b_list.append(b2-b1)
+    if b1+b2<=16:
+        b_list.append(b1+b2)
+    if b1 *2 <=16:
+        b_list.append(b1*2)
+    b_list.append(round(b1/2,0))
+    print(b_list)
         
     filter_list = []
     for index,row in df1.iterrows():
         for item in row:
             filter_list.append(item)
-    print(filter_list)
+    # print(filter_list)
 
     
     for index, row in df.iterrows():
