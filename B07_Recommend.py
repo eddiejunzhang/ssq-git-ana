@@ -10,6 +10,7 @@ import platform
 import psycopg2
 import configparser
 import pandas as pd
+import increase_history_to_db 
 
 def ping(ip):
     sys_id = platform.system()
@@ -211,7 +212,7 @@ def filter_contain_history_ball(df, qty):
     return df_result
 
 def main():
-    how_many = 49
+    how_many = 49v
     df = generate_recommemdation(how_many) 
     diff = [20,21,22,23]
     df = filter_first_sixth_diff_is(df, diff)
@@ -223,4 +224,5 @@ def main():
     print(df)
     
 if __name__ == "__main__":
+    increase_history_to_db.main()                             
     main()
