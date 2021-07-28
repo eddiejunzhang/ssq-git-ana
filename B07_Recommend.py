@@ -211,8 +211,8 @@ def filter_contain_history_ball(df, qty):
             df_result = df_result.append(s2, ignore_index=True)            
     return df_result
 
-def main():
-    how_many = 49v
+def give_me_guess(n):
+    how_many = n
     df = generate_recommemdation(how_many) 
     diff = [20,21,22,23]
     df = filter_first_sixth_diff_is(df, diff)
@@ -222,7 +222,9 @@ def main():
     df = filter_contain_history_ball(df, qty)
     
     print(df)
+    return df
     
 if __name__ == "__main__":
-    increase_history_to_db.main()                             
-    main()
+    increase_history_to_db.main()   
+    n = 49                          
+    give_me_guess(n)
