@@ -9,7 +9,7 @@ B07 在B07的基础上，看看猜多少个能够中奖
 from B07_Recommend import give_me_guess
 
 def main():
-    award ="071522242730"
+    award ="050607111420"
     count = 0
     times = 1000
     n = 10000
@@ -27,6 +27,7 @@ def main():
                 string = "{:0>2d}{:0>2d}{:0>2d}{:0>2d}{:0>2d}{:0>2d}".format(r1,r2,r3,r4,r5,r6)
                 
                 count += 1
+                print(j,count)
                 if award == string:
                     print(count,idnum,'=======================')
                     print(string)

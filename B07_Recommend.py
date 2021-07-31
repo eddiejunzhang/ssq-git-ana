@@ -58,8 +58,11 @@ def link_postgresql_db():
     PORT = config['DB']['PORT']
     
     print(HOST)
-    conn = psycopg2.connect(database=DATABASE, user=USER, \
-                            password=PASSWORD, host=HOST, port=PORT)
+    conn = psycopg2.connect(database=DATABASE, 
+                            user=USER, 
+                            password=PASSWORD, 
+                            host=HOST, 
+                            port=PORT)
     return conn
 
 def generate_recommemdation(qty):
@@ -71,6 +74,7 @@ def generate_recommemdation(qty):
     '''%qty
     print('start to generate df.')
     df = pd.read_sql(strSQL,conn)
+    print('get df.')
     return df
 
 def filter_first_sixth_diff_is(df, diff_list):
@@ -183,7 +187,8 @@ def filter_contain_history_ball(df, qty):
         b_list.append(b1+b2)
     if b1 *2 <=16:
         b_list.append(b1*2)
-    b_list.append(round(b1/2,0))
+    if round(b1/2,0)>0:
+        b_list.append(round(b1/2,0))
     print(b_list)
         
     filter_list = []
@@ -215,7 +220,7 @@ def give_me_guess(n):
     how_many = n
     df = generate_recommemdation(how_many) 
     diff = [20,21,22,23]
-    df = filter_first_sixth_diff_is(df, diff)
+    # df = filter_first_sixth_diff_is(df, diff)
     df = filter_a_plus_b_is_c(df)
     df = filter_d_minus_c_is_b_minus_a(df)
     qty = 2
