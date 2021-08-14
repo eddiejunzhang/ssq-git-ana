@@ -75,7 +75,8 @@ def get_ssq_record(m,df,LastGameNumber,MarkSeqNum):
 
     soup=BeautifulSoup(html,'lxml')
 #    soup=BeautifulSoup(html,'html5lib')
-
+    latest_seqnumber = ''
+    
     for i in range(2,22):
         if MarkSeqNum > LastGameNumber:
             tr=soup.find_all('tr')[i]
@@ -83,6 +84,9 @@ def get_ssq_record(m,df,LastGameNumber,MarkSeqNum):
             row=[td[0].text]
             row.append(td[1].text)
             MarkSeqNum=td[1].text
+
+            if i == 2:
+                latest_seqnumber = MarkSeqNum
         
             # 这个字段存放中奖球的号码。
             for k in range(0,7):
@@ -114,7 +118,7 @@ def get_ssq_record(m,df,LastGameNumber,MarkSeqNum):
                      '2nd':row[11]},
                     index=[1])
                 df=df.append(new,ignore_index=True) 
-    return df, MarkSeqNum
+    return df, MarkSeqNum, latest_seqnumber
 
 def insert_data_into_db(df):
     
@@ -207,18 +211,26 @@ def insert_data_into_db(df):
 def main():
     pass
     # 取得当前数据库中，号数最大的一期期号LastGameNumber
-    LastGameNumber = "2021077"
+    with open('latest_recorded.txt', 'r') as f:
+        LastGameNumber = f.read()
+    # LastGameNumber = "2021077"
     MarkSeqNum = '2100001' #这个变量存放最后一次取得的期号，用于判断是否是2003001这最后一期
     # df用于存放待导入的数据，它开始是一个空的dataframe
     df = pd.DataFrame(columns=['Date','SeqNum','r1','r2','r3','r4','r5','r6','b','Revenue','1st','2nd'])
     
+    latest = ''
     for i in range(1,4):
-        df, MarkSeqNum = get_ssq_record(i,df,LastGameNumber, MarkSeqNum)
+        df, MarkSeqNum, latest_seqnumber = get_ssq_record(i,df,LastGameNumber, MarkSeqNum)
+        latest = max(latest_seqnumber,latest)
     
     df = df.sort_values(by='SeqNum',axis=0, ascending=True)
     
     print(df)
+    print('The last game is: ',latest )
     
+    with open('latest_recorded.txt', 'w') as f:
+        f.write(latest)
+
     insert_data_into_db(df)
 
 if __name__ == "__main__":

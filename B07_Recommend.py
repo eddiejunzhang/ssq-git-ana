@@ -68,7 +68,7 @@ def link_postgresql_db():
 def generate_recommemdation(qty):
     conn = link_postgresql_db()
     strSQL = '''
-    SELECT id,r1,r2,r3,r4,r5,r6 FROM public.tbluniversalset1
+    SELECT id,r1,r2,r3,r4,r5,r6 FROM public.tbluniversalset
     ORDER BY RANDOM()
     LIMIT %d
     '''%qty
@@ -220,7 +220,7 @@ def give_me_guess(n):
     how_many = n
     df = generate_recommemdation(how_many) 
     diff = [20,21,22,23]
-    # df = filter_first_sixth_diff_is(df, diff)
+    df = filter_first_sixth_diff_is(df, diff)
     df = filter_a_plus_b_is_c(df)
     df = filter_d_minus_c_is_b_minus_a(df)
     qty = 2
