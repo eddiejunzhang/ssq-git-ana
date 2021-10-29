@@ -217,17 +217,60 @@ def filter_contain_history_ball(df, qty):
     return df_result
 
 def sum_is_former_one(df):
-    pass 
+    # 中奖号码中的两个号之和，与上一期的某个号相同
+    df_result = pd.DataFrame()
+    conn = link_postgresql_db()
+    strSQL = '''
+    SELECT r1,r2,r3,r4,r5,r6
+    FROM public.tblhistory
+    ORDER BY id DESC
+    LIMIT 1
+    '''
+    df1 = pd.read_sql(strSQL,conn)
+    
+    r_last = []
+    for i in range(6):
+        r_last.append(df1.iloc[0,i])
+    # print(r_last)   
+
+    for index, row in df.iterrows():
+        idnum = row['id']
+        r6 = row['r6']
+        r5 = row['r5']
+        r4 = row['r4']
+        r3 = row['r3']
+        r2 = row['r2']
+        r1 = row['r1']
+        r = []
+        r.append(r1)
+        r.append(r2)
+        r.append(r3)
+        r.append(r4)
+        r.append(r5)
+        r.append(r6)
+        flag = False
+        for i in range(5):
+            for j in range(1,6):
+                sum_r = r[i] + r[j]
+                # print(r[i] , r[j],sum)
+                for k in range(6):
+                    if r_last[k] == sum_r:
+                        flag = True or flag
+        if flag:
+            s2 = pd.Series([idnum, r1, r2, r3, r4, r5, r6],
+               index=['id', 'r1', 'r2', 'r3', 'r4', 'r5','r6'])
+            df_result = df_result.append(s2, ignore_index=True)            
+    return df_result               
 
 def give_me_guess(n):
     how_many = n
     df = generate_recommemdation(how_many) 
     diff = [19,20,21,22,23,24,25]
-    df = filter_first_sixth_diff_is(df, diff)
-    df = filter_a_plus_b_is_c(df)
-    df = filter_d_minus_c_is_b_minus_a(df)
+    # df = filter_first_sixth_diff_is(df, diff)
+    # df = filter_a_plus_b_is_c(df)
+    # df = filter_d_minus_c_is_b_minus_a(df)
     qty = 2
-    df = filter_contain_history_ball(df, qty)
+    # df = filter_contain_history_ball(df, qty)
     df = sum_is_former_one(df)
     
     print(df)
@@ -235,5 +278,5 @@ def give_me_guess(n):
     
 if __name__ == "__main__":
     increase_history_to_db.main()   
-    n = 81                          
+    n = 1                     
     give_me_guess(n)
