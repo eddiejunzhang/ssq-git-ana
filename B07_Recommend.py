@@ -156,7 +156,7 @@ def filter_d_minus_c_is_b_minus_a(df):
             for j in range(i+1,len(m)):
                 b = m[j]
                 # print('b = ',b)
-                if a == b:
+                if a == b and a in (2,3,4):
                     mark_minus += 1
                         
         if mark_minus > 0:
@@ -216,20 +216,24 @@ def filter_contain_history_ball(df, qty):
             df_result = df_result.append(s2, ignore_index=True)            
     return df_result
 
+def sum_is_former_one(df):
+    pass 
+
 def give_me_guess(n):
     how_many = n
     df = generate_recommemdation(how_many) 
-    diff = [20,21,22,23]
+    diff = [19,20,21,22,23,24,25]
     df = filter_first_sixth_diff_is(df, diff)
     df = filter_a_plus_b_is_c(df)
     df = filter_d_minus_c_is_b_minus_a(df)
     qty = 2
     df = filter_contain_history_ball(df, qty)
+    df = sum_is_former_one(df)
     
     print(df)
     return df
     
 if __name__ == "__main__":
     increase_history_to_db.main()   
-    n = 49                          
+    n = 81                          
     give_me_guess(n)
