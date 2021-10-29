@@ -266,11 +266,11 @@ def give_me_guess(n):
     how_many = n
     df = generate_recommemdation(how_many) 
     diff = [19,20,21,22,23,24,25]
-    # df = filter_first_sixth_diff_is(df, diff)
-    # df = filter_a_plus_b_is_c(df)
-    # df = filter_d_minus_c_is_b_minus_a(df)
+    df = filter_first_sixth_diff_is(df, diff)
+    df = filter_a_plus_b_is_c(df)
+    df = filter_d_minus_c_is_b_minus_a(df)
     qty = 2
-    # df = filter_contain_history_ball(df, qty)
+    df = filter_contain_history_ball(df, qty)
     df = sum_is_former_one(df)
     
     print(df)
@@ -278,5 +278,5 @@ def give_me_guess(n):
     
 if __name__ == "__main__":
     increase_history_to_db.main()   
-    n = 1                     
+    n = 181                     
     give_me_guess(n)
