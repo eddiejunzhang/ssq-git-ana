@@ -9,7 +9,7 @@ B07 在B07的基础上，看看猜多少个能够中奖
 from B07_Recommend import give_me_guess
 
 def main():
-    award ="050607111420"
+    award ="040710141626"
     count = 0
     times = 1000
     n = 10000

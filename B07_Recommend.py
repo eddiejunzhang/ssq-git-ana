@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jun 27 21:21:06 2021
+把近几期的历史数据放入表中
 B07 推荐几组数，去购买
 @author: Eddiezhang
 """
@@ -78,6 +79,7 @@ def generate_recommemdation(qty):
     return df
 
 def filter_first_sixth_diff_is(df, diff_list):
+    # 首尾差
     if diff_list == None:
         diff_list = [20]
     df1 = pd.DataFrame()
@@ -278,5 +280,5 @@ def give_me_guess(n):
     
 if __name__ == "__main__":
     increase_history_to_db.main()   
-    n = 181                     
+    n = 1                   
     give_me_guess(n)
