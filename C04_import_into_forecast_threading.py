@@ -11,9 +11,13 @@ C04是把C02变成多线程的
 import os
 import sys
 config_path_macmini = r"/Users/zhangjun/Code/_privateconfig"
-if os.path.isdir(config_path_macmini): 
+config_path_pi4 = r"/home/pi/Python_Proj/_privateconfig"
+if os.path.isdir(config_path_macmini):
     config_path = config_path_macmini
     whose_pc = 'macmini'
+elif os.path.isdir(config_path_pi4):
+    config_path = config_path_pi4
+    whose_pc = 'mpi4'    
     
 sys.path.append(config_path)
 

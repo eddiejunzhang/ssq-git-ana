@@ -40,6 +40,7 @@ def main():
     strSQL = '''
     SELECT *
     from public.tblallavailablecontrol
+    where id > 966
     '''
     # print(strSQL)
     df = pd.read_sql(strSQL,conn)
@@ -48,6 +49,7 @@ def main():
     # df = df.head(2)
     for index,row in df.iterrows():
         print(index)
+        identi = row['id']
         r1min = row['r1h']
         r1max = row['r1t']
         r2min = row['r2h']
@@ -81,9 +83,9 @@ def main():
                                         '''%(i,j,k,l,m,n)
                                         cur.execute(strSQL)
                                         conn.commit()
-                                        print('No. %d is saved. %d:%d-%d-%d'%(index, count, i,j,k))
+                                        print('No. %d is saved. %d:%d-%d-%d'%(identi, count, i,j,k))
                                     else:
-                                        print('No. %d is NOT saved. %d:%d-%d-%d'%(index, count,i,j,k))
+                                        print('No. %d is NOT saved. %d:%d-%d-%d'%(identi, count,i,j,k))
                     print(index, 'i = ',i, 'j = ',j, 'k = ',k)
 
     print("Records created successfully")

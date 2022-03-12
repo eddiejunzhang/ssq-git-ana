@@ -11,11 +11,11 @@ SumGroup2Max=130
 SumGroup3Min=81
 SumGroup3Max=145
 # for test f
-PossibleRedBall1=2,4,9,11,12,15,16,20,21,22,23,28,29,31,32
+PossibleRedBall1=5, 15, 20, 23, 25, 26, 28, 29, 32
 # for test g
-PossibleRedBall2=7,22
+PossibleRedBall2=20,27
 # for test h
-DifferencyRange=21,23
+DifferencyRange=19,21,23,25
 
 # 推荐红球时，需要的分数
 # 在上一期中出现过的红球分数
