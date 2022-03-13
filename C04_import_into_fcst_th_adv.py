@@ -336,7 +336,7 @@ def main_section(s1, s2):
             
     conn.close()
     
-def main():
+def get_range():
     conn = link_postgresql_db()
     
     minT=constants.MinT
@@ -357,29 +357,33 @@ def main():
     conn.close()
     return minT, maxT
 
-minT,maxT=main()
-l = int((maxT-minT)/3)
-s1 = minT
-s2 = s1+l
-s3 = s2+l
-s4 = maxT
-
-# 数据数据库为PG，计算机为MacMini,3线程最好
-threads = []
-t1 = threading.Thread(target=main_section, args=(s1,s2))
-threads.append(t1)
-t2 = threading.Thread(target=main_section, args=(s2,s3))
-threads.append(t2)
-t3 = threading.Thread(target=main_section, args=(s3,s4))
-threads.append(t3)
-    
-if __name__ == "__main__":
+def run_multi_thread():
     write_log(log_file, '开始计算。')
+    
+    minT,maxT=get_range()
+    l = int((maxT-minT)/3)
+    s1 = minT
+    s2 = s1+l
+    s3 = s2+l
+    s4 = maxT
+    
+    # 数据数据库为PG，计算机为MacMini,3线程最好
+    threads = []
+    t1 = threading.Thread(target=main_section, args=(s1,s2))
+    threads.append(t1)
+    t2 = threading.Thread(target=main_section, args=(s2,s3))
+    threads.append(t2)
+    t3 = threading.Thread(target=main_section, args=(s3,s4))
+    threads.append(t3)
+
     for t in threads:
         t.setDaemon(True)
         t.start()
         
     for t in threads:
         t.join()
+        
+    write_log(log_file, '结束计算。')    
     
-    write_log(log_file, '结束计算。')
+if __name__ == "__main__":
+    run_multi_thread()

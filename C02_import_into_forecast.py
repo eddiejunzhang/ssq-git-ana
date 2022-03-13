@@ -338,7 +338,7 @@ def main():
             # print(strSQL)
             cur.execute(strSQL)
     
-    conn.commit()
+            conn.commit()
     conn.close()
 
 def test1():

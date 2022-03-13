@@ -160,9 +160,13 @@ def main(threshod):
     fp.write(
      "根据以往经验，推荐红球如下："+'\n'
      )
-    for i in range(len(list_guess)):
+    for i in range(len(list_guess)-1):
         fp.write(str(list_guess[i]))
         fp.write(",")
+    fp.write(str(list_guess[-1]))
+        
+    # text = ','.join(list_guess)
+    # fp.write(text)
     
     fp.write("\n")
     fp.close()
