@@ -211,7 +211,7 @@ def insert_data_into_db(df):
 def main():
     pass
     # 取得当前数据库中，号数最大的一期期号LastGameNumber
-    with open('latest_recorded.txt', 'r') as f:
+    with open('./latest_recorded.txt', 'r') as f:
         LastGameNumber = f.read()
     # LastGameNumber = "2021077"
     MarkSeqNum = '2100001' #这个变量存放最后一次取得的期号，用于判断是否是2003001这最后一期

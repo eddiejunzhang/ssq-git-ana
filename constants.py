@@ -11,7 +11,7 @@ SumGroup2Max=130
 SumGroup3Min=81
 SumGroup3Max=145
 # for test f
-PossibleRedBall1=1,5,9,19,23,24,25,26,27,33
+PossibleRedBall1=5,7,19,23,24,25,26,27,29,32
 # for test g
 PossibleRedBall2=20,23,21
 # for test h
