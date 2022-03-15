@@ -10,7 +10,8 @@ C06 把几个操作串起来，做成计划任务
 import increase_history_to_db
 import C01_Creat_Guess_Table
 import C03_Choose_Red
-import C04_import_into_fcst_th_adv
+# import C04_import_into_fcst_th_adv
+import C02_import_into_forecast
 import schedule
 import time
 import os
@@ -45,7 +46,8 @@ def compute():
     os.remove(filename)
     os.rename(temp,filename)
 
-    C04_import_into_fcst_th_adv.run_multi_thread()
+    # C04_import_into_fcst_th_adv.run_multi_thread()
+    C02_import_into_forecast.main()
 
 schedule.every().monday.at("00:01").do(compute)
 schedule.every().wednesday.at("00:01").do(compute)
